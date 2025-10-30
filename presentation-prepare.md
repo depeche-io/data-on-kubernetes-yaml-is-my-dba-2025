@@ -186,12 +186,103 @@ First K8s operators
 -> lift-n-shift Patroni
 -> at first covered that PG was alive and in cluster
 
+Finding "just the right amount of YAML"
 
 ---
 
 Problem: Users and DB declarative management
 
-Fixed since Day1  TODO: when
+Fixed since Day1
+
+```
+apiVersion: "acid.zalan.do/v1"
+kind: postgresql
+metadata:
+  name: acid-minimal-cluster
+spec:
+  teamId: "acid"
+  volume:
+    size: 1Gi
+  numberOfInstances: 2
+  users:
+    # database owner
+    zalando:
+    - superuser
+    - createdb
+
+    # role for application foo
+    foo_user: # or 'foo_user: []'
+
+  #databases: name->owner
+  databases:
+    foo: zalando
+  postgresql:
+    version: "17"
+```
+
+---
+
+Backup - solved
+
+```
+apiVersion: postgres-operator.crunchydata.com/v1beta1
+kind: PostgresCluster
+metadata:
+  name: hippo
+spec:
+  postgresVersion: 17
+  instances:
+    - dataVolumeClaimSpec:
+        accessModes:
+          - 'ReadWriteOnce'
+        resources:
+          requests:
+            storage: 1Gi
+  backups:
+    pgbackrest:
+      configuration:
+        - secret:
+            name: hippo-pgbackrest-secrets
+      global:
+        repo1-cipher-type: aes-256-cbc
+      repos:
+        - name: repo1
+          volume:
+            volumeClaimSpec:
+              accessModes:
+                - 'ReadWriteOnce'
+              resources:
+                requests:
+                  storage: 1Gi
+```
+
+---
+
+There is never too much of YAML!
+
+TODO: CRD image:
+
+
+---
+
+```
+apiVersion: stackgres.io/v1
+kind: SGDbOps
+metadata:
+  name: benchmark
+spec:
+ sgCluster: my-cluster
+ op: benchmark
+ maxRetries: 1
+ benchmark:
+   type: pgbench
+   pgbench:
+     databaseSize: 1Gi
+     duration: P0DT0H10M0S
+     concurrentClients: 10
+     threads: 10
+   connectionType: primary-service
+```
 
 ---
 
@@ -227,19 +318,46 @@ Not fixed
 
 CloudNativePG
 
+Short story - made from scratch
+
 ---
 
-resiliency bug - 
+resiliency bug - TODO: screenshot
+https://github.com/cloudnative-pg/cloudnative-pg/issues/7407
+
+
+---
+
+"TL;DR: After version 1.26.0, I believe we should evaluate submitting a draft pull request with a proposed solution in CNPG on the same path as Patroni, allowing us to receive early feedback and potentially include the feature in version 1.27."
+
+---
+
+TODO: Image of a person going in circles
 
 ---
 
 Why is it for us acceptable?
 
-TODO:
+Generate as a Graph
+
+Companies with 100+ engineers:
+- This represents roughly the top 10-15% of tech companies
+-> 0.5 DBA
+
+Companies with 500+ engineers:
+- Top 3-5% of tech companies
+-> 2+ DBs
+
+Companies with 1,000+ engineers:
+- Top 1-2% of tech companies
+-> 5+ DBAs
+
+All others:
+0-1 DBA
 
 ---
 
-Do some "typical PG problems" still matter?
+Do some "typical technical PG problems" still matter?
 
 CHECKPOINT before restarting
 
@@ -258,12 +376,38 @@ TODO: surprising
 
 ---
 
+Java developers image TODO - we've persuaded the developers 
+
+
+---
+
+CloudNativePG == Amazon RDS
+
+(? does  )
+
+
+
+---
+
 Summing up:
 
-Originally: A seasoned DBA was running on a VM with lot of scripts.
-
+Originally: A seasoned DBA was running on a VM with lot of scripts. You couldn't have a vacation.
 
 We've simplified it: now you can have this YAML
+
+developer point of view toward are we there at a managed service
+
+
+
+---
+
+But is this "full autopilot"?
+
+Quote the docs
+
+-> end goal should be fully autotunable DB"
+
+---
 
 Now under behind the scenes, you ran in dynamic environment these technologies and you probably need at least 2 SREs.
 
