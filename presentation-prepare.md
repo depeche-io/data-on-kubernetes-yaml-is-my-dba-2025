@@ -12,10 +12,6 @@ style: |
   section::after {
     content: attr(data-marpit-pagination) ' / ' attr(data-marpit-pagination-total);
   }
-Prepare a presentation for KubeCon conference in Atlanta (research what it is before).
-
-I want to have a minimalist presentation highlight 1-2 ideas on a slide for 25 mins sessions. Suggest the content via Marp's speaker notes feature (websearch what it is)
-
 
 ---
 
