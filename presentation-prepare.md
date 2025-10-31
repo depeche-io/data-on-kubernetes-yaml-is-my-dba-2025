@@ -110,7 +110,6 @@ Especially if DB is sharded on application layer and use-cases change per-tentan
 > 40:1 
 
 [One DBA per 40 database instances or per 4 terabytes of data (2019)](https://www.reddit.com/r/SQLServer/comments/d2w5f6/dbas_how_many_environments_do_you_support/)
-(2019)
 
 [DBA-to-developer ratio should not be less than 1:200 (2024)](https://www.bytebase.com/blog/how-many-dbas-should-a-company-hire/)
 
@@ -250,9 +249,12 @@ In VMs: Patroni runs next PG
 
 # Finding "just the right amount of YAML"
 
+- Cluster definition, config options
 - Users and DB declarative management
-- How to 
 
+- Backups and WAL transfer
+
+- Bootstrap / creation logic?
 
 ---
 
@@ -279,23 +281,14 @@ spec:
 
 ---
 
-Backup - solved
-
 ```
 apiVersion: postgres-operator.crunchydata.com/v1beta1
 kind: PostgresCluster
 metadata:
   name: hippo
 spec:
-  postgresVersion: 17
-  instances:
-    - dataVolumeClaimSpec:
-        accessModes:
-          - 'ReadWriteOnce'
-        resources:
-          requests:
-            storage: 1Gi
-  backups:
+  ...
+  backups: # <-- BACKUPS GO HERE
     pgbackrest:
       configuration:
         - secret:
@@ -342,35 +335,39 @@ spec:
 
 ---
 
-Problem: lost block device-level backups
-(the main DR method)
+# Problem
+# Lost block device-level backups (snapshots)
+
+- Main DR method
+
 Fixed: VolumeSnapshot 
 [Beta in 1.17] (2019)
 
 ---
 
-Problem: snapshotting multiple volumes at once lost 
+# Problem
+# Snapshotting multiple volumes at once lost 
+
 Fixed: VolumeGroupSnapshot
-[Beta in 1.32]
+[Beta in 1.32] (2024)
 
 ---
 
-Problem: managing replication slots
-TODO: ???
+# Problem
+# Restart DB without reconnecting users
+
+pgbouncer and orchestration around
 
 ---
 
-Problem: restart DB without reconnecting users
-TODO: ??? done? with pgbouncer?
+# Problem
+# Changing the most configs on the fly without restarting leader
+
+Not fixed (PG's nature)
 
 ---
 
-Problem: changing the most configs on the fly without restarting leader
-Not fixed
-
----
-
-2nd generation of operators
+# 2nd generation of operators
 
 CloudNativePG
 
@@ -378,8 +375,19 @@ Short story - made from scratch
 
 ---
 
-resiliency bug - TODO: screenshot
+[Bug]: Split-brain in case of network partition #7407
+
 https://github.com/cloudnative-pg/cloudnative-pg/issues/7407
+
+...
+
+> - Identify the primary node and disconnect it from the network using docker network disconnect kind kind-worker-xxx
+> - Observe that CNPG promoted a new primary node.
+> - Bash into the old primary node using docker exec, and bash into the postgres pod inside the node. Postgres on this node is still primary.
+
+...
+
+> This is a typical split brain. Any workload that origins from the same VM (e.g., pod is on the same node as the old primary) can generate writes to the old primary.
 
 
 ---
@@ -392,100 +400,130 @@ https://github.com/cloudnative-pg/cloudnative-pg/issues/7407
 
 ---
 
-Why is it for us acceptable?
-
-Generate as a Graph
+# Why is it for us acceptable?
 
 Companies with 100+ engineers:
-- This represents roughly the top 10-15% of tech companies
--> 0.5 DBA
+- This represents roughly the top 10-15% of tech companies -> 0.5 DBA
 
 Companies with 500+ engineers:
-- Top 3-5% of tech companies
--> 2+ DBs
+- Top 3-5% of tech companies -> 2+ DBs
 
 Companies with 1,000+ engineers:
-- Top 1-2% of tech companies
--> 5+ DBAs
+- Top 1-2% of tech companies -> 5+ DBAs
 
-All others:
-0-1 DBA
+All others -> 0-1 DBA
 
 ---
 
-Java developers image TODO - we've persuaded the developers 
+# Random KubeCon London conversation:
+
+> ... we run a lot of multi-master MySQL clusters in Kubernetes and just time to time they have a split brain. They can typically self-recover quickly, we also have tested backups...
+
+> Me: Are you kidding? Why do you tolerate this?
+
+> Well, there are just a few SREs and many (e.g. dozens of DBs) and we need to solve real problems.
 
 ---
 
-CloudNativePG == Amazon RDS
-
-(? does  )
-
+![javadays](./javadays.png)
 
 ---
 
-What do we really expect from our DBA?
+# CloudNativePG == Amazon RDS
 
-Autopilot DBaaS
+as seens by some developers
 
 ---
 
-Do some "typical technical PG problems" still matter?
+# What do we really expect from our DBA?
+
+> "Autopilot" DBaaS with very simple interface for complex tasks
+
+---
+
+![rds-actions.png](./rds-actions.png)
+
+---
+
+# Do some "typical technical PG problems" still matter?
+
+TODO: vynechat tento slide?
 
 Slow query without any index?
 
 TODO: surprising
 
-
 ---
 
-Problem: basic DB tuning based on Pod size not being done
+# Problem
+
+# Basic memory tuning based on Pod size not being done
 
 - `shared_buffers`
 - `work_mem`
 
-Not fixed - WHY???
-
-TODO: surprising
-
-
-
+Why not if other DBs do it at least to some extent?
 
 ---
 
-Summing up:
+# Problem
 
-Originally: A seasoned DBA was running on a VM with lot of scripts. He couldn't have a vacation.
+# Could we autotune also PG GUCs (configs) based on the logs / metrics from our workload?
 
-We've simplified it: now you can have this YAML
+- autovacuum
+- maintenance
+- ...
 
-developer point of view toward are we there at a managed service
-
-
-
----
-
-But is this "full autopilot"?
-
-Quote the docs
-
--> end goal should be fully autotunable DB"
+Our Oracle did it back in the day...
 
 ---
 
-Now under behind the scenes, you ran in dynamic environment these technologies and you probably need at least 2 SREs.
+# Summing up
 
-Job well done!
+Originally: A seasoned DBA was managing VMs. He/She couldn't have a vacation.
 
+:arrow_heading_down:
 
+And now: Now you have at least 3 SREs / Platform Engineers running your DBaaS. You pay for their vacations.
 
-#### TIP??
+> But they also operate 10-20 different CNCF projects just to keep DBaaS running
+
 ---
 
-Gaininig confidence
+# Summing up
 
-Can you run mixed deployments of Postreses?
+Originally: A lot of custom scripts for bootstrapping and majority of 2nd day ops.
 
+:arrow_heading_down:
 
+And now: You declare the expected state. Operators can take your DBs there.
 
+> This is a good thing!
 
+---
+
+# Summing up
+
+Originally: Any serious production meant hiring at least some DBA support.
+
+:arrow_heading_down:
+
+And now: Many teams believe in the operator which can nowadays operate DB instance very autonomously. Many teams are very surprised that PG expertise is a must once they reach non-trivial scale.
+
+> My personal observation.
+
+---
+
+# Summing up
+
+Originally: Developers don't understand Postgres internals well.
+
+:repeat:
+
+This won't change.
+
+---
+
+# But we can make Postgres as a product more friendly to them.
+
+If you 
