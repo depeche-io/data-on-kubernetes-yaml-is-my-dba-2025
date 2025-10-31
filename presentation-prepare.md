@@ -445,6 +445,24 @@ as seens by some developers
 
 ---
 
+# Mixture of declarative and imperative approach
+
+Example: blue-green RDS is not in Terraform and never will be.
+
+Very annoying for some, but it's much more to use the right tool for the job.
+
+---
+
+# What does this mean for your DBaaS platform
+
+GitOps can get you 90% of the way.
+
+You still need to figure out how to issue imperative commands.
+
+[VACUUM FULL / CLUSTER CONCURRENTLY](https://commitfest.postgresql.org/patch/5117/)
+
+---
+
 # Do some "typical technical PG problems" still matter?
 
 TODO: vynechat tento slide?
@@ -525,5 +543,3 @@ This won't change.
 ---
 
 # But we can make Postgres as a product more friendly to them.
-
-If you 
