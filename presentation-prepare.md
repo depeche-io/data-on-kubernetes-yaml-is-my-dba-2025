@@ -106,27 +106,17 @@ Especially if DB is sharded on application layer and use-cases change per-tentan
 
 ---
 
-Question: How many DBs can a DBA handle?
-https://www.forrester.com/blogs/10-09-30-how_many_dbas_do_you_need_support_databases/
-40:1 (2010)
+[How many DBs can a DBA handle? (2010)](https://www.forrester.com/blogs/10-09-30-how_many_dbas_do_you_need_support_databases/)
+> 40:1 
 
-one DBA per 40 database instances or per 4 terabytes of data
-https://www.reddit.com/r/SQLServer/comments/d2w5f6/dbas_how_many_environments_do_you_support/
-VERIFY
+[One DBA per 40 database instances or per 4 terabytes of data (2019)](https://www.reddit.com/r/SQLServer/comments/d2w5f6/dbas_how_many_environments_do_you_support/)
 (2019)
 
-
-DBA-to-developer ratio should not be less than 1:200
-https://www.bytebase.com/blog/how-many-dbas-should-a-company-hire/
-(2024)
-
-FIXME: any research on this?
+[DBA-to-developer ratio should not be less than 1:200 (2024)](https://www.bytebase.com/blog/how-many-dbas-should-a-company-hire/)
 
 ---
 
-FIXME: tenure of DBAs - 11y+
-
-
+![dba-tenure.png](./dba-tenure.png)
 
 ---
 
@@ -148,7 +138,7 @@ Natural motivation for having Postgres in K8s:
 
 # Single instance VM
 
-- Reasonable decision on H-A :checked
+- Reasonable decision on H-A :white_check_mark:
 
 ## But
 - Hidden complexities all over the place
@@ -171,9 +161,9 @@ Small benefit from VM
 
 # Docker revelations
 
-- Performance penalty :false
-- Containers restart all the time :false
-- Split microservice DBs to multiple servers?
+- Performance penalty :bomb:
+- Containers restart all the time :pushpin:
+- Split microservice DBs to multiple servers? :triangular_ruler:
 
 ---
 
@@ -193,7 +183,7 @@ Explain complexity of Spilo (too much envs knobs, multiple PG versions later, ..
 
 Benefit - questionable for non-expert
 
-Image: Swiss army nife building a wooden cabin
+:palm_tree: :arrow_right: :office:
 
 ---
 
@@ -202,6 +192,25 @@ Image: Swiss army nife building a wooden cabin
 - Snapshotting
 - "Fine-grained" lifecycle control
 - Major version upgrades?
+
+---
+
+# Core PostgreSQL vs. "Product"
+
+```
+Core Postgres
+
+  Backup & Restore
+  WAL store
+
+    RBAC
+
+    Monitoring (exporter)
+    H-A, automatic repair
+
+      Connection Pooling
+      CDC
+```
 
 ---
 
@@ -219,27 +228,33 @@ Typical use-cases:
 - verify DisasterRecovery
 - semi-manually manage accounts and permissions
 
----
-
-Core PostgreSQL vs. "Product"
-
--> Highlight all other benefits of operator (backups included, leader-replication automatic setup, lifecycle control for 2nd day operations)
-
 
 ---
 
-First K8s operators
+# First K8s operators
+
+Zalando PG Operator, PGO, StackGres
 
 -> lift-n-shift Patroni
 -> at first covered that PG was alive and in cluster
 
-Finding "just the right amount of YAML"
+---
+
+# Problem
+
+# Pod construction - Patroni vs. PG in probes
+
+In VMs: Patroni runs next PG
 
 ---
 
-Problem: Users and DB declarative management
+# Finding "just the right amount of YAML"
 
-Fixed since Day1
+- Users and DB declarative management
+- How to 
+
+
+---
 
 ```
 apiVersion: "acid.zalan.do/v1"
@@ -247,11 +262,8 @@ kind: postgresql
 metadata:
   name: acid-minimal-cluster
 spec:
-  teamId: "acid"
-  volume:
-    size: 1Gi
-  numberOfInstances: 2
-  users:
+  ...
+  users: # <-- USERS GO HERE
     # database owner
     zalando:
     - superuser
@@ -263,8 +275,6 @@ spec:
   #databases: name->owner
   databases:
     foo: zalando
-  postgresql:
-    version: "17"
 ```
 
 ---
@@ -307,7 +317,7 @@ spec:
 
 There is never too much of YAML!
 
-![too-much-yaml.png](./too-much-yaml.jpg)
+![too-much-yaml.png](./too-much-yaml.png)
 
 ---
 

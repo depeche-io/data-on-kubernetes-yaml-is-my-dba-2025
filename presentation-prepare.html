@@ -76,20 +76,16 @@ Conference: CNCF-hosted Co-located Events North America 2025 in 31 days</p>
 <h1 id="how-many-dbs-require-any-db-level-tuning">How many DBs require (any) DB-level tuning?</h1>
 </section>
 </foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="13" lang="en-US">
-<p>Question: How many DBs can a DBA handle?<br />
-<a href="https://www.forrester.com/blogs/10-09-30-how_many_dbas_do_you_need_support_databases/">https://www.forrester.com/blogs/10-09-30-how_many_dbas_do_you_need_support_databases/</a><br />
-40:1 (2010)</p>
-<p>one DBA per 40 database instances or per 4 terabytes of data<br />
-<a href="https://www.reddit.com/r/SQLServer/comments/d2w5f6/dbas_how_many_environments_do_you_support/">https://www.reddit.com/r/SQLServer/comments/d2w5f6/dbas_how_many_environments_do_you_support/</a><br />
-VERIFY<br />
+<p><a href="https://www.forrester.com/blogs/10-09-30-how_many_dbas_do_you_need_support_databases/">How many DBs can a DBA handle? (2010)</a></p>
+<blockquote>
+<p>40:1</p>
+</blockquote>
+<p><a href="https://www.reddit.com/r/SQLServer/comments/d2w5f6/dbas_how_many_environments_do_you_support/">One DBA per 40 database instances or per 4 terabytes of data (2019)</a><br />
 (2019)</p>
-<p>DBA-to-developer ratio should not be less than 1:200<br />
-<a href="https://www.bytebase.com/blog/how-many-dbas-should-a-company-hire/">https://www.bytebase.com/blog/how-many-dbas-should-a-company-hire/</a><br />
-(2024)</p>
-<p>FIXME: any research on this?</p>
+<p><a href="https://www.bytebase.com/blog/how-many-dbas-should-a-company-hire/">DBA-to-developer ratio should not be less than 1:200 (2024)</a></p>
 </section>
 </foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="14" lang="en-US">
-<p>FIXME: tenure of DBAs - 11y+</p>
+<p><img src="./dba-tenure.png" alt="dba-tenure.png" /></p>
 </section>
 </foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="15" lang="en-US">
 <p>Natural motivation for having Postgres in K8s:</p>
@@ -112,7 +108,7 @@ VERIFY<br />
 </foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="17" lang="en-US">
 <h1 id="single-instance-vm">Single instance VM</h1>
 <ul>
-<li>Reasonable decision on H-A :checked</li>
+<li>Reasonable decision on H-A <img class="emoji" draggable="false" alt="✅" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@16.0.1/assets/svg/2705.svg" data-marp-twemoji=""/></li>
 </ul>
 <h2 id="but">But</h2>
 <ul>
@@ -133,9 +129,9 @@ VERIFY<br />
 </foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="19" lang="en-US">
 <h1 id="docker-revelations">Docker revelations</h1>
 <ul>
-<li>Performance penalty :false</li>
-<li>Containers restart all the time :false</li>
-<li>Split microservice DBs to multiple servers?</li>
+<li>Performance penalty <img class="emoji" draggable="false" alt="💣" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@16.0.1/assets/svg/1f4a3.svg" data-marp-twemoji=""/></li>
+<li>Containers restart all the time <img class="emoji" draggable="false" alt="📌" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@16.0.1/assets/svg/1f4cc.svg" data-marp-twemoji=""/></li>
+<li>Split microservice DBs to multiple servers? <img class="emoji" draggable="false" alt="📐" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@16.0.1/assets/svg/1f4d0.svg" data-marp-twemoji=""/></li>
 </ul>
 </section>
 </foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="20" lang="en-US">
@@ -154,7 +150,7 @@ VERIFY<br />
 <h1 id="dead-ends---lets-bring-postgresql-into-container-2nd-attempt">Dead ends - Let's bring PostgreSQL into container, 2nd attempt</h1>
 <p>Explain complexity of Spilo (too much envs knobs, multiple PG versions later, ...)</p>
 <p>Benefit - questionable for non-expert</p>
-<p>Image: Swiss army nife building a wooden cabin</p>
+<p><img class="emoji" draggable="false" alt="🌴" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@16.0.1/assets/svg/1f334.svg" data-marp-twemoji=""/> <img class="emoji" draggable="false" alt="➡️" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@16.0.1/assets/svg/27a1.svg" data-marp-twemoji=""/> <img class="emoji" draggable="false" alt="🏢" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@16.0.1/assets/svg/1f3e2.svg" data-marp-twemoji=""/></p>
 </section>
 </foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="22" lang="en-US">
 <h1 id="more-dead-ends---what-are-we-gonna-loose-with-kubernetes">More dead ends - what are we gonna loose with Kubernetes?</h1>
@@ -165,6 +161,22 @@ VERIFY<br />
 </ul>
 </section>
 </foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="23" lang="en-US">
+<h1 id="core-postgresql-vs-product">Core PostgreSQL vs. &quot;Product&quot;</h1>
+<pre is="marp-pre" data-auto-scaling="downscale-only"><code>Core Postgres
+
+  Backup &amp; Restore
+  WAL store
+
+    RBAC
+
+    Monitoring (exporter)
+    H-A, automatic repair
+
+      Connection Pooling
+      CDC
+</code></pre>
+</section>
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="24" lang="en-US">
 <p>PostgreSQL management</p>
 <ul>
 <li>predefined users? (Script)</li>
@@ -172,7 +184,7 @@ VERIFY<br />
 <li>monitoring? Supported!</li>
 </ul>
 </section>
-</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="24" lang="en-US">
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="25" lang="en-US">
 <p>Typical use-cases:</p>
 <ul>
 <li>refresh QA environment DBs</li>
@@ -180,29 +192,32 @@ VERIFY<br />
 <li>semi-manually manage accounts and permissions</li>
 </ul>
 </section>
-</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="25" lang="en-US">
-<p>Core PostgreSQL vs. &quot;Product&quot;</p>
-<p>-&gt; Highlight all other benefits of operator (backups included, leader-replication automatic setup, lifecycle control for 2nd day operations)</p>
-</section>
 </foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="26" lang="en-US">
-<p>First K8s operators</p>
+<h1 id="first-k8s-operators">First K8s operators</h1>
+<p>Zalando PG Operator, PGO, StackGres</p>
 <p>-&gt; lift-n-shift Patroni<br />
 -&gt; at first covered that PG was alive and in cluster</p>
-<p>Finding &quot;just the right amount of YAML&quot;</p>
 </section>
 </foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="27" lang="en-US">
-<p>Problem: Users and DB declarative management</p>
-<p>Fixed since Day1</p>
+<h1 id="problem">Problem</h1>
+<h1 id="pod-construction---patroni-vs-pg-in-probes">Pod construction - Patroni vs. PG in probes</h1>
+<p>In VMs: Patroni runs next PG</p>
+</section>
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="28" lang="en-US">
+<h1 id="finding-just-the-right-amount-of-yaml">Finding &quot;just the right amount of YAML&quot;</h1>
+<ul>
+<li>Users and DB declarative management</li>
+<li>How to</li>
+</ul>
+</section>
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="29" lang="en-US">
 <pre is="marp-pre" data-auto-scaling="downscale-only"><code>apiVersion: &quot;acid.zalan.do/v1&quot;
 kind: postgresql
 metadata:
   name: acid-minimal-cluster
 spec:
-  teamId: &quot;acid&quot;
-  volume:
-    size: 1Gi
-  numberOfInstances: 2
-  users:
+  ...
+  users: # &lt;-- USERS GO HERE
     # database owner
     zalando:
     - superuser
@@ -214,11 +229,9 @@ spec:
   #databases: name-&gt;owner
   databases:
     foo: zalando
-  postgresql:
-    version: &quot;17&quot;
 </code></pre>
 </section>
-</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="28" lang="en-US">
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="30" lang="en-US">
 <p>Backup - solved</p>
 <pre is="marp-pre" data-auto-scaling="downscale-only"><code>apiVersion: postgres-operator.crunchydata.com/v1beta1
 kind: PostgresCluster
@@ -251,11 +264,11 @@ spec:
                   storage: 1Gi
 </code></pre>
 </section>
-</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="29" lang="en-US">
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="31" lang="en-US">
 <p>There is never too much of YAML!</p>
-<p><img src="./too-much-yaml.jpg" alt="too-much-yaml.png" /></p>
+<p><img src="./too-much-yaml.png" alt="too-much-yaml.png" /></p>
 </section>
-</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="30" lang="en-US">
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="32" lang="en-US">
 <pre is="marp-pre" data-auto-scaling="downscale-only"><code>apiVersion: stackgres.io/v1
 kind: SGDbOps
 metadata:
@@ -274,47 +287,47 @@ spec:
    connectionType: primary-service
 </code></pre>
 </section>
-</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="31" lang="en-US">
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="33" lang="en-US">
 <p>Problem: lost block device-level backups<br />
 (the main DR method)<br />
 Fixed: VolumeSnapshot<br />
 [Beta in 1.17] (2019)</p>
 </section>
-</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="32" lang="en-US">
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="34" lang="en-US">
 <p>Problem: snapshotting multiple volumes at once lost<br />
 Fixed: VolumeGroupSnapshot<br />
 [Beta in 1.32]</p>
 </section>
-</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="33" lang="en-US">
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="35" lang="en-US">
 <p>Problem: managing replication slots<br />
 TODO: ???</p>
 </section>
-</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="34" lang="en-US">
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="36" lang="en-US">
 <p>Problem: restart DB without reconnecting users<br />
 TODO: ??? done? with pgbouncer?</p>
 </section>
-</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="35" lang="en-US">
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="37" lang="en-US">
 <p>Problem: changing the most configs on the fly without restarting leader<br />
 Not fixed</p>
 </section>
-</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="36" lang="en-US">
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="38" lang="en-US">
 <p>2nd generation of operators</p>
 <p>CloudNativePG</p>
 <p>Short story - made from scratch</p>
 </section>
-</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="37" lang="en-US">
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="39" lang="en-US">
 <p>resiliency bug - TODO: screenshot<br />
 <a href="https://github.com/cloudnative-pg/cloudnative-pg/issues/7407">https://github.com/cloudnative-pg/cloudnative-pg/issues/7407</a></p>
 </section>
-</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="38" lang="en-US">
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="40" lang="en-US">
 <blockquote>
 <p>TL;DR: After version 1.26.0, I believe we should evaluate submitting a draft pull request with a proposed solution in CNPG on the same path as Patroni, allowing us to receive early feedback and potentially include the feature in version 1.27.</p>
 </blockquote>
 </section>
-</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="39" lang="en-US">
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="41" lang="en-US">
 <p><img src="./walking-in-circles.png" alt="walking-in-circles.png" /></p>
 </section>
-</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="40" lang="en-US">
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="42" lang="en-US">
 <p>Why is it for us acceptable?</p>
 <p>Generate as a Graph</p>
 <p>Companies with 100+ engineers:</p>
@@ -335,23 +348,23 @@ Not fixed</p>
 <p>All others:<br />
 0-1 DBA</p>
 </section>
-</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="41" lang="en-US">
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="43" lang="en-US">
 <p>Java developers image TODO - we've persuaded the developers</p>
 </section>
-</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="42" lang="en-US">
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="44" lang="en-US">
 <p>CloudNativePG == Amazon RDS</p>
 <p>(? does  )</p>
 </section>
-</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="43" lang="en-US">
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="45" lang="en-US">
 <p>What do we really expect from our DBA?</p>
 <p>Autopilot DBaaS</p>
 </section>
-</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="44" lang="en-US">
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="46" lang="en-US">
 <p>Do some &quot;typical technical PG problems&quot; still matter?</p>
 <p>Slow query without any index?</p>
 <p>TODO: surprising</p>
 </section>
-</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="45" lang="en-US">
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="47" lang="en-US">
 <p>Problem: basic DB tuning based on Pod size not being done</p>
 <ul>
 <li><code>shared_buffers</code></li>
@@ -360,23 +373,23 @@ Not fixed</p>
 <p>Not fixed - WHY???</p>
 <p>TODO: surprising</p>
 </section>
-</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="46" lang="en-US">
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="48" lang="en-US">
 <p>Summing up:</p>
 <p>Originally: A seasoned DBA was running on a VM with lot of scripts. He couldn't have a vacation.</p>
 <p>We've simplified it: now you can have this YAML</p>
 <p>developer point of view toward are we there at a managed service</p>
 </section>
-</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="47" lang="en-US">
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="49" lang="en-US">
 <p>But is this &quot;full autopilot&quot;?</p>
 <p>Quote the docs</p>
 <p>-&gt; end goal should be fully autotunable DB&quot;</p>
 </section>
-</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="48" lang="en-US">
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="50" lang="en-US">
 <p>Now under behind the scenes, you ran in dynamic environment these technologies and you probably need at least 2 SREs.</p>
 <p>Job well done!</p>
 <h4 id="tip">TIP??</h4>
 </section>
-</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="49" lang="en-US">
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="51" lang="en-US">
 <p>Gaininig confidence</p>
 <p>Can you run mixed deployments of Postreses?</p>
 </section>
