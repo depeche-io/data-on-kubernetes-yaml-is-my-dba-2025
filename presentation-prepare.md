@@ -1,3 +1,17 @@
+---
+marp: true
+theme: gaia
+class: [gaia]
+#paginate: true
+lang: en-US
+transition: none
+style: |
+  section {
+    align-content: start;
+  }
+  section::after {
+    content: attr(data-marpit-pagination) ' / ' attr(data-marpit-pagination-total);
+  }
 Prepare a presentation for KubeCon conference in Atlanta (research what it is before).
 
 I want to have a minimalist presentation highlight 1-2 ideas on a slide for 25 mins sessions. Suggest the content via Marp's speaker notes feature (websearch what it is)
@@ -18,20 +32,6 @@ This session offers a practical, vendor-neutral case study of running PostgreSQL
 Format: Solo presentation 25 mins
 Conference: CNCF-hosted Co-located Events North America 2025 in 31 days
 
----
-marp: true
-theme: gaia
-class: [gaia]
-#paginate: true
-lang: en-US
-transition: none
-style: |
-  section {
-    align-content: start;
-  }
-  section::after {
-    content: attr(data-marpit-pagination) ' / ' attr(data-marpit-pagination-total);
-  }
 
 ---
 
@@ -50,17 +50,20 @@ TODO: ksicht, format
 
 ---
 
-Question: Do you consider running your databases in Kubernetes boring?
+# Question
+# Do you consider running your databases in Kubernetes boring?
 
 ---
 
-??? (image of heavily underutilized envs - VM, aurora)
+Peaks max at 50-60% of capacity
 
--> comments very large slack typically, peaks max at 50-60% of capacity
+![./underutilized.png](underutilized.png)
+
 
 ---
 
-Question: Is PostgreSQL suited to run in a container?
+# Question
+# Is PostgreSQL suited to run in a container?
 
 ---
 
@@ -73,31 +76,33 @@ Example: you can promote to leader online, but demotion needs restart
 
 ---
 
-Question: DB Uptime at least 99.999? (26s downtime per month)
+# Question
+# DB Uptime at least 99.999?
+(26s downtime per month)
 
 ---
 
 A candidate's resume:
 
-(quote)
- ... after finishing project we achieved 0% of DB failures on infra level ...
-(/quote)
+>  ... after finishing project we achieved 0% of DB downtime on infra level ...
 
 Reality check: typically no more >20s of downtime when doing a DB switchover.
 
 ---
 
-Question: Does a typical developer understands his DB well? (What he/she thinks?)
+# Question
+# Does a typical developer understands his DB performance well?
+
+(What he/she thinks?)
 
 ---
 
-???
+Especially if DB is sharded on application layer and use-cases change per-tentant (SaaS)
 
 ---
 
-Question: How many DBs require (any) DB-level tuning?
-
-FIXME: any research on this?
+# Question
+# How many DBs require (any) DB-level tuning?
 
 ---
 
@@ -119,33 +124,84 @@ FIXME: any research on this?
 
 ---
 
-Natural motivation:
+FIXME: tenure of DBAs - 11y+
+
+
+
+---
+
+Natural motivation for having Postgres in K8s:
 - align PostgreSQL runtime with all other applications
 
+---
+
+# My personal PG journey:
+- single instance VM
+- single instance Docker container
+- multiple VMs with Patroni
+- (some dead-ends)
+- (more dead-ends)
+- Zalando PG Operator
+- CloudNativePG
 
 ---
 
-Gaininig confidence
+# Single instance VM
 
-Can you run mixed deployments of Postreses?
+- Reasonable decision on H-A :checked
+
+## But
+- Hidden complexities all over the place
+
+-> "just PostgreSQL is not enough"
+-> DBA required for anything non trivial
 
 ---
 
-Docker time!
+# Docker time!
 
 Dockerized vs. VMs
 
 Libc problems
 - tooling not included, DIY
 
+Small benefit from VM
+
 ---
 
-PostgreSQL containerized?
+# Docker revelations
+
+- Performance penalty :false
+- Containers restart all the time :false
+- Split microservice DBs to multiple servers?
+
+---
+
+# PostgreSQL containerized on any node?
 
 - visible benefit with nodes pinned to disk/node?
 
 - Docker Swarm app era
--> no, Patroni
+
+-> no, revert to VMs with Patroni
+
+---
+
+# Dead ends - Let's bring PostgreSQL into container, 2nd attempt
+
+Explain complexity of Spilo (too much envs knobs, multiple PG versions later, ...)
+
+Benefit - questionable for non-expert
+
+Image: Swiss army nife building a wooden cabin
+
+---
+
+# More dead ends - what are we gonna loose with Kubernetes?
+
+- Snapshotting
+- "Fine-grained" lifecycle control
+- Major version upgrades?
 
 ---
 
@@ -169,15 +225,6 @@ Core PostgreSQL vs. "Product"
 
 -> Highlight all other benefits of operator (backups included, leader-replication automatic setup, lifecycle control for 2nd day operations)
 
----
-
-Let's bring PostgreSQL into container, 2nd attempt
-
-Explain complexity of Spilo (too much envs knobs, multiple PG versions later, ...)
-
-Benefit - questionable for non-expert
-
-Image: Swiss army nife building a wooden cabin
 
 ---
 
@@ -260,8 +307,7 @@ spec:
 
 There is never too much of YAML!
 
-TODO: CRD image:
-
+![too-much-yaml.png](./too-much-yaml.jpg)
 
 ---
 
@@ -328,11 +374,11 @@ https://github.com/cloudnative-pg/cloudnative-pg/issues/7407
 
 ---
 
-"TL;DR: After version 1.26.0, I believe we should evaluate submitting a draft pull request with a proposed solution in CNPG on the same path as Patroni, allowing us to receive early feedback and potentially include the feature in version 1.27."
+> TL;DR: After version 1.26.0, I believe we should evaluate submitting a draft pull request with a proposed solution in CNPG on the same path as Patroni, allowing us to receive early feedback and potentially include the feature in version 1.27.
 
 ---
 
-TODO: Image of a person going in circles
+![walking-in-circles.png](./walking-in-circles.png)
 
 ---
 
@@ -357,11 +403,29 @@ All others:
 
 ---
 
+Java developers image TODO - we've persuaded the developers 
+
+---
+
+CloudNativePG == Amazon RDS
+
+(? does  )
+
+
+---
+
+What do we really expect from our DBA?
+
+Autopilot DBaaS
+
+---
+
 Do some "typical technical PG problems" still matter?
 
-CHECKPOINT before restarting
+Slow query without any index?
 
 TODO: surprising
+
 
 ---
 
@@ -374,16 +438,6 @@ Not fixed - WHY???
 
 TODO: surprising
 
----
-
-Java developers image TODO - we've persuaded the developers 
-
-
----
-
-CloudNativePG == Amazon RDS
-
-(? does  )
 
 
 
@@ -391,7 +445,7 @@ CloudNativePG == Amazon RDS
 
 Summing up:
 
-Originally: A seasoned DBA was running on a VM with lot of scripts. You couldn't have a vacation.
+Originally: A seasoned DBA was running on a VM with lot of scripts. He couldn't have a vacation.
 
 We've simplified it: now you can have this YAML
 
@@ -415,6 +469,12 @@ Job well done!
 
 
 
+#### TIP??
+---
+
+Gaininig confidence
+
+Can you run mixed deployments of Postreses?
 
 
 
