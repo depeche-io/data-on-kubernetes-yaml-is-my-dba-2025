@@ -2,47 +2,51 @@
 marp: true
 theme: gaia
 class: [gaia]
-#paginate: true
+paginate: true
 lang: en-US
 transition: none
 style: |
+
   section {
+    justify-content: flex-start;
     align-content: start;
   }
   section::after {
     content: attr(data-marpit-pagination) ' / ' attr(data-marpit-pagination-total);
+    color: lightgray;
   }
 
 ---
 
-Abstract:
-They told us, “Don’t run databases on Kubernetes.” We heard, “Challenge accepted.” This is the story of how we went from handcrafted Postgres chaos to a stable, CNCF-aligned DBaaS using CloudNativePG over the years — and lived to tell the tale.
-We started with containers, then pinned nodes in Kubernetes (spoiler: not scalable). Zalando’s operator with Patroni got us partway, but the real leap came with CloudNativePG: rebuilt from scratch, capable of autopilot.
-You’ll hear real incidents (yes, including “the one with the wrong PVC”), lessons learned, and how we’ve moved from tickets to self-service via GitOps. So what happens when YAML becomes your new DBA?
-This is a story of maturity, simplicity, real benefits CNCF brings to your project. Not just from a single project, but from the whole ecosystem evolving over the years in networking, deployment, and much more.
-Whether you're building a platform or escaping vendor lock-in, come laugh, learn, and reconsider running DBs in Kubernetes.
+<!-- 
 
-Benefits to the ecosystem:
-This session offers a practical, vendor-neutral case study of running PostgreSQL on Kubernetes using CNCF-native tooling and shifting mindset along the way. Attendees will gain real-world insights into using CloudNativePG for production workloads, including lessons from failures, operational wins, and architecture trade-offs. By showing how a DIY journey evolved into a sustainable, operator-managed DBaaS, the talk empowers platform teams to adopt stateful workloads more confidently. It also helps drive awareness and adoption of CNCF projects, promotes GitOps best practices, and encourages open-source contributions to ecosystem tooling.
+  Abstract:
+  They told us, “Don’t run databases on Kubernetes.” We heard, “Challenge accepted.” This is the story of how we went from handcrafted Postgres chaos to a stable, CNCF-aligned DBaaS using CloudNativePG over the years — and lived to tell the tale.
+  We started with containers, then pinned nodes in Kubernetes (spoiler: not scalable). Zalando’s operator with Patroni got us partway, but the real leap came with CloudNativePG: rebuilt from scratch, capable of autopilot.
+  You’ll hear real incidents (yes, including “the one with the wrong PVC”), lessons learned, and how we’ve moved from tickets to self-service via GitOps. So what happens when YAML becomes your new DBA?
+  This is a story of maturity, simplicity, real benefits CNCF brings to your project. Not just from a single project, but from the whole ecosystem evolving over the years in networking, deployment, and much more.
+  Whether you're building a platform or escaping vendor lock-in, come laugh, learn, and reconsider running DBs in Kubernetes.
 
-Format: Solo presentation 25 mins
-Conference: CNCF-hosted Co-located Events North America 2025 in 31 days
+  Benefits to the ecosystem:
+  This session offers a practical, vendor-neutral case study of running PostgreSQL on Kubernetes using CNCF-native tooling and shifting mindset along the way. Attendees will gain real-world insights into using CloudNativePG for production workloads, including lessons from failures, operational wins, and architecture trade-offs. By showing how a DIY journey evolved into a sustainable, operator-managed DBaaS, the talk empowers platform teams to adopt stateful workloads more confidently. It also helps drive awareness and adoption of CNCF projects, promotes GitOps best practices, and encourages open-source contributions to ecosystem tooling.
 
+  Format: Solo presentation 25 mins
+  Conference: CNCF-hosted Co-located Events North America 2025 in 31 days
+-->
 
----
+# YAML Is My DBA Now
+# Our Postgres Journey from DIY to Autopilot Self-Service
 
-TODO: nektere slidy precuhuji
-
-# YAML Is My DBA Now: Our Postgres Journey from DIY to Autopilot Self-Service
+David Pech
+2025
 
 ---
 
 # David Pech
 
-TODO: ksicht, format
-![Wrike](./wrike.png)
-![Sestra Emmy](./emmy.png)
-![Golden Kubestronaut](./golden-kubestronaut.png)
+![w:300](./david.jpg)
+![bg right w:300](./wrike.png)
+![bg right w:300](./golden-kubestronaut.png)
 
 ---
 
@@ -51,9 +55,15 @@ TODO: ksicht, format
 
 ---
 
-Peaks max at 50-60% of capacity
+<style scoped>
+h1 {
+  color: lightblue;
+}
+</style>
 
-![./underutilized.png](underutilized.png)
+# Peaks max at 50-60% of capacity
+
+![bg](underutilized.png)
 
 
 ---
@@ -102,18 +112,22 @@ Especially if DB is sharded on application layer and use-cases change per-tentan
 
 ---
 
-[How many DBs can a DBA handle? (2010)](https://www.forrester.com/blogs/10-09-30-how_many_dbas_do_you_need_support_databases/)
-> 40:1 
+How many DBs can a DBA handle? **40:1** (2010)
+[link](https://www.forrester.com/blogs/10-09-30-how_many_dbas_do_you_need_support_databases/)
 
-[One DBA per 40 database instances or per 4 terabytes of data (2019)](https://www.reddit.com/r/SQLServer/comments/d2w5f6/dbas_how_many_environments_do_you_support/)
+**One DBA per 40 database** instances or per 4 terabytes of data (2019)
+[link](https://www.reddit.com/r/SQLServer/comments/d2w5f6/dbas_how_many_environments_do_you_support/)
 
-[DBA-to-developer ratio should not be less than 1:200 (2024)](https://www.bytebase.com/blog/how-many-dbas-should-a-company-hire/)
+DBA-to-developer ratio should not be less than **1:200** (2024)
+[link](https://www.bytebase.com/blog/how-many-dbas-should-a-company-hire/)
+
+---
+
+![bg width:900](./dba-tenure.png)
 
 ---
 
-![dba-tenure.png](./dba-tenure.png)
-
----
+<!-- TODO: keep? -->
 
 Natural motivation for having Postgres in K8s:
 - align PostgreSQL runtime with all other applications
@@ -124,7 +138,7 @@ Natural motivation for having Postgres in K8s:
 - single instance VM
 - single instance Docker container
 - multiple VMs with Patroni
-- (some dead-ends)
+- (some dead-ends dreaming about next steps)
 - (more dead-ends)
 - Zalando PG Operator
 - CloudNativePG
@@ -167,6 +181,7 @@ Small benefit from VM
 - visible benefit with nodes pinned to disk/node?
 
 - Docker Swarm app era
+- PG container can't handle the orchestration
 
 -> no, revert to VMs with Patroni
 
@@ -174,10 +189,11 @@ Small benefit from VM
 
 # Dead ends - Let's bring PostgreSQL into container, 2nd attempt
 
-Explain complexity of Spilo (too much envs knobs, multiple PG versions later, ...)
+Spilo project (too many knobs, multiple PG versions, ...)
 
-Benefit - questionable for non-expert
+Benefit - questionable (?) for non-expert
 
+Feels like having a Swiss knife for building a house.
 :palm_tree: :arrow_right: :office:
 
 ---
@@ -209,6 +225,17 @@ Core Postgres
 
 ---
 
+# Default vs. 'insert-your-config-here' boundary
+
+> We just want to run the Postgres and don't care about it.
+
+If something breaks, we'll research how to fix / improve it.
+
+IMHO: There are already too many opinions on how to run Postgres and which tools to use.
+
+
+<!-- TODO: remove?
+
 PostgreSQL management
 
 - predefined users? (Script)
@@ -222,6 +249,7 @@ Typical use-cases:
 - refresh QA environment DBs
 - verify DisasterRecovery
 - semi-manually manage accounts and permissions
+-->
 
 
 ---
@@ -239,7 +267,7 @@ Zalando PG Operator, PGO, StackGres
 
 # Pod construction - Patroni vs. PG in probes
 
-In VMs: Patroni runs next PG
+Inside of VMs: Patroni runs next PG (systemd slices)
 
 ---
 
@@ -304,9 +332,9 @@ spec:
 
 ---
 
-There is never too much of YAML!
+# There is never too much of YAML!
 
-![too-much-yaml.png](./too-much-yaml.png)
+![bg right width:400](./too-much-yaml.png)
 
 ---
 
@@ -371,17 +399,11 @@ Short story - made from scratch
 
 ---
 
-[Bug]: Split-brain in case of network partition #7407
-
-https://github.com/cloudnative-pg/cloudnative-pg/issues/7407
-
-...
+[Bug]: Split-brain in case of network partition [#7407](https://github.com/cloudnative-pg/cloudnative-pg/issues/7407)
 
 > - Identify the primary node and disconnect it from the network using docker network disconnect kind kind-worker-xxx
 > - Observe that CNPG promoted a new primary node.
 > - Bash into the old primary node using docker exec, and bash into the postgres pod inside the node. Postgres on this node is still primary.
-
-...
 
 > This is a typical split brain. Any workload that origins from the same VM (e.g., pod is on the same node as the old primary) can generate writes to the old primary.
 
@@ -390,28 +412,33 @@ https://github.com/cloudnative-pg/cloudnative-pg/issues/7407
 
 > TL;DR: After version 1.26.0, I believe we should evaluate submitting a draft pull request with a proposed solution in CNPG on the same path as Patroni, allowing us to receive early feedback and potentially include the feature in version 1.27.
 
+...
+
+> v1.27: Primary Isolation Check — Now Stable
+The liveness pinger, introduced experimentally in 1.26, is now a stable feature. With .spec.probes.liveness.isolationCheck enabled by default, the liveness probe now performs primary isolation checks to improve detection and handling of primary connectivity issues in Kubernetes environments.
+
 ---
 
-![walking-in-circles.png](./walking-in-circles.png)
+![bg width:700](./walking-in-circles.png)
 
 ---
 
 # Why is it for us acceptable?
 
-Companies with 100+ engineers:
-- This represents roughly the top 10-15% of tech companies -> 0.5 DBA
+- Companies with 1,000+ engineers (5+ DBAs):
+  Top 1-2% of tech companies
 
-Companies with 500+ engineers:
-- Top 3-5% of tech companies -> 2+ DBs
+- Companies with 500+ engineers (2+ DBAs):
+  Top 3-5% of tech companies
 
-Companies with 1,000+ engineers:
-- Top 1-2% of tech companies -> 5+ DBAs
+- Companies with 100+ engineers (0.5 DBA):
+  This represents roughly the top 10-15% of tech companies 
 
-All others -> 0-1 DBA
+- All others -> 0-1 DBA
 
 ---
 
-# Random KubeCon London conversation:
+# Random KubeCon London conversation (SRE perspective):
 
 > ... we run a lot of multi-master MySQL clusters in Kubernetes and just time to time they have a split brain. They can typically self-recover quickly, we also have tested backups...
 
@@ -421,7 +448,14 @@ All others -> 0-1 DBA
 
 ---
 
-![javadays](./javadays.png)
+# Developer perspective
+
+2025-10
+JavaDays, Prague, CZ
+
+"RDS equivalent"
+
+![bg right:50% width:500](./javadays.png)
 
 ---
 
@@ -435,15 +469,13 @@ as seens by some developers
 
 > "Autopilot" DBaaS with very simple interface for complex tasks
 
----
-
-![rds-actions.png](./rds-actions.png)
+![bg right:50% width:280](./rds-actions.png)
 
 ---
 
 # Mixture of declarative and imperative approach
 
-Example: blue-green RDS is not in Terraform and never will be.
+Example: blue-green RDS is not in declarative Terraform [but...](https://hashicorp.github.io/terraform-provider-aws/design-decisions/rds-bluegreen-deployments/)
 
 Very annoying for some, but it's much more to use the right tool for the job.
 
@@ -459,6 +491,7 @@ You still need to figure out how to issue imperative commands.
 
 ---
 
+<!-- TODO ???? -->
 # Do some "typical technical PG problems" still matter?
 
 TODO: vynechat tento slide?
@@ -482,13 +515,25 @@ Why not if other DBs do it at least to some extent?
 
 # Problem
 
-# Could we autotune also PG GUCs (configs) based on the logs / metrics from our workload?
+# No smart PG GUCs (configs) tuning based on the logs / metrics?
 
 - autovacuum
 - maintenance
 - ...
 
 Our Oracle did it back in the day...
+
+---
+
+# Problem
+
+# Best-practises in monitoring?
+
+<!-- 
+TODO: screenshot wrike dashbaord
+
+TODO: comment from postgres.fm
+-->
 
 ---
 
@@ -539,3 +584,5 @@ This won't change.
 ---
 
 # But we can make Postgres as a product more friendly to them.
+
+<!-- TODO: QR >
