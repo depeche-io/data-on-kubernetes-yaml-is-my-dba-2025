@@ -2,7 +2,6 @@
 marp: true
 theme: gaia
 class: [gaia]
-paginate: true
 lang: en-US
 transition: none
 style: |
@@ -41,6 +40,8 @@ David Pech
 2025
 
 ---
+
+<!-- paginate: true -->
 
 # David Pech
 
@@ -529,6 +530,7 @@ Our Oracle did it back in the day...
 
 # Best-practises in monitoring?
 
+Too many recipes, too many cooks.
 <!-- 
 TODO: screenshot wrike dashbaord
 
