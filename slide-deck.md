@@ -132,15 +132,16 @@ DBA-to-developer ratio should not be less than **1:200** (2024)
 ---
 
 # Natural motivation for having Postgres in K8s
+- our DBA might leave after 20 years
 - align PostgreSQL runtime with all other applications
 - allow developers themselves to manage small clusters
 
 ---
 
-# My personal PG journey:
-- single instance VM
+# My personal PG journey
+- single instance Virtual Machine
 - single instance Docker container
-- multiple VMs with Patroni
+- multiple Virtual Machines with Patroni
 - (some dead-ends dreaming about next steps)
 - (more dead-ends)
 - Zalando PG Operator
@@ -179,7 +180,7 @@ Small benefit from VM
 
 ---
 
-# PostgreSQL containerized on any node?
+# Pushing Postgres beyond Docker
 
 - visible benefit with nodes pinned to disk/node?
 
@@ -190,7 +191,7 @@ Small benefit from VM
 
 ---
 
-# Dead ends - Let's bring PostgreSQL into container, 2nd attempt
+# Dead ends - Let's have H-A PostgreSQL in containers, 2nd attempt
 
 Spilo project (too many knobs, multiple PG versions, ...)
 
@@ -592,12 +593,14 @@ This won't change.
 
 ---
 
-# "Almost there myth"
+# SREs, Developers: We are there already!
 
 In fact DB creation and basic management is so easy with operators
 
 But thinking that YAML is your DBA is just a fallacy.
 
 Could the operators help even more in the future?
+
+# Thank you!
 
 <!-- TODO: QR >
