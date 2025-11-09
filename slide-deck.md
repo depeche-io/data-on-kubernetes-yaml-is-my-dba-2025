@@ -95,6 +95,8 @@ A candidate's resume:
 
 Reality check: typically no more >20s of downtime when doing a DB switchover.
 
+
+<!--
 ---
 
 # Question
@@ -105,6 +107,7 @@ Reality check: typically no more >20s of downtime when doing a DB switchover.
 ---
 
 Especially if DB is sharded on application layer and use-cases change per-tentant (SaaS)
+-->
 
 ---
 
@@ -128,10 +131,9 @@ DBA-to-developer ratio should not be less than **1:200** (2024)
 
 ---
 
-<!-- TODO: keep? -->
-
-Natural motivation for having Postgres in K8s:
+# Natural motivation for having Postgres in K8s
 - align PostgreSQL runtime with all other applications
+- allow developers themselves to manage small clusters
 
 ---
 
@@ -150,7 +152,7 @@ Natural motivation for having Postgres in K8s:
 
 - Reasonable decision on H-A :white_check_mark:
 
-## But
+## But DIY!
 - Hidden complexities all over the place
 
 -> "just PostgreSQL is not enough"
@@ -205,6 +207,8 @@ Feels like having a Swiss knife for building a house.
 - "Fine-grained" lifecycle control
 - Major version upgrades?
 
+(Stability, Performace already not a problem since Docker times)
+
 ---
 
 # Core PostgreSQL vs. "Product"
@@ -226,7 +230,7 @@ Core Postgres
 
 ---
 
-# Default vs. 'insert-your-config-here' boundary
+# PG Community is very opinionated
 
 > We just want to run the Postgres and don't care about it.
 
@@ -283,7 +287,7 @@ Inside of VMs: Patroni runs next PG (systemd slices)
 
 ---
 
-```
+```yaml
 apiVersion: "acid.zalan.do/v1"
 kind: postgresql
 metadata:
@@ -306,7 +310,7 @@ spec:
 
 ---
 
-```
+```yaml
 apiVersion: postgres-operator.crunchydata.com/v1beta1
 kind: PostgresCluster
 metadata:
@@ -339,7 +343,7 @@ spec:
 
 ---
 
-```
+```yaml
 apiVersion: stackgres.io/v1
 kind: SGDbOps
 metadata:
@@ -424,7 +428,7 @@ The liveness pinger, introduced experimentally in 1.26, is now a stable feature.
 
 ---
 
-# Why is it for us acceptable?
+# Why is it acceptable?
 
 - Companies with 1,000+ engineers (5+ DBAs):
   Top 1-2% of tech companies
@@ -441,7 +445,7 @@ The liveness pinger, introduced experimentally in 1.26, is now a stable feature.
 
 # Random KubeCon London conversation (SRE perspective):
 
-> ... we run a lot of multi-master MySQL clusters in Kubernetes and just time to time they have a split brain. They can typically self-recover quickly, we also have tested backups...
+> ... we run a lot of multi-master MySQL clusters in Kubernetes and just time to time they have a split brain. They can typically recover manually quickly, we also have tested backups...
 
 > Me: Are you kidding? Why do you tolerate this?
 
@@ -454,15 +458,17 @@ The liveness pinger, introduced experimentally in 1.26, is now a stable feature.
 2025-10
 JavaDays, Prague, CZ
 
-"RDS equivalent"
+> CloudNativePG as "RDS equivalent"?
 
 ![bg right:50% width:500](./javadays.png)
 
+<!--
 ---
 
 # CloudNativePG == Amazon RDS
 
 as seens by some developers
+-->
 
 ---
 
@@ -492,7 +498,7 @@ You still need to figure out how to issue imperative commands.
 
 ---
 
-<!-- TODO ???? -->
+<!-- 
 # Do some "typical technical PG problems" still matter?
 
 TODO: vynechat tento slide?
@@ -502,6 +508,7 @@ Slow query without any index?
 TODO: surprising
 
 ---
+-->
 
 # Problem
 
@@ -585,6 +592,12 @@ This won't change.
 
 ---
 
-# But we can make Postgres as a product more friendly to them.
+# "Almost there myth"
+
+In fact DB creation and basic management is so easy with operators
+
+But thinking that YAML is your DBA is just a fallacy.
+
+Could the operators help even more in the future?
 
 <!-- TODO: QR >
